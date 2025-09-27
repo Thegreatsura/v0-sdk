@@ -3230,20 +3230,67 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "type": "string"
-                    },
                     "logs": {
                       "type": "array",
                       "items": {
-                        "type": "string"
-                      }
+                        "type": "object",
+                        "properties": {
+                          "createdAt": {
+                            "type": "string",
+                            "description": "Log creation timestamp."
+                          },
+                          "deploymentId": {
+                            "type": "string",
+                            "description": "Deployment ID."
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "Log entry ID."
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Log message content."
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": ["stdout", "stderr"],
+                            "description": "Output stream type."
+                          },
+                          "level": {
+                            "type": "string",
+                            "enum": ["error", "warning", "info"],
+                            "default": "info",
+                            "description": "Log severity level."
+                          },
+                          "object": {
+                            "type": "string",
+                            "const": "deployment_log",
+                            "description": "Object type identifier."
+                          }
+                        },
+                        "required": [
+                          "createdAt",
+                          "deploymentId",
+                          "id",
+                          "text",
+                          "type",
+                          "object"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "description": "Array of log entries."
                     },
                     "nextSince": {
-                      "type": "number"
+                      "type": "number",
+                      "description": "Timestamp for pagination."
+                    },
+                    "object": {
+                      "type": "string",
+                      "const": "list",
+                      "description": "Object type identifier."
                     }
                   },
-                  "required": ["logs"],
+                  "required": ["logs", "object"],
                   "additionalProperties": false
                 }
               }
@@ -7262,9 +7309,48 @@
                   "type": "string",
                   "description": "API URL to access this message via the API."
                 },
+                "authorId": {
+                  "type": ["string", "null"],
+                  "description": "The ID of the user who sent the message."
+                },
                 "parentId": {
                   "type": ["string", "null"],
                   "description": "The ID of the parent message."
+                },
+                "attachments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "description": "The URL where the attachment file can be accessed."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The original filename of the attachment."
+                      },
+                      "contentType": {
+                        "type": "string",
+                        "description": "The MIME type of the attachment file (e.g., image/png, application/pdf)."
+                      },
+                      "size": {
+                        "type": "number",
+                        "description": "The size of the attachment file in bytes."
+                      },
+                      "content": {
+                        "type": "string",
+                        "description": "The base64-encoded content of the attachment file, if available."
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["screenshot", "figma", "zip"],
+                        "description": "Optional v0-specific attachment type for enhanced processing."
+                      }
+                    },
+                    "required": ["url", "size"],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [
@@ -7274,7 +7360,8 @@
                 "createdAt",
                 "type",
                 "role",
-                "apiUrl"
+                "apiUrl",
+                "authorId"
               ],
               "additionalProperties": false,
               "description": "Summary of a single message within a chat, including role, content, type, timestamp, and API URL."
@@ -8255,9 +8342,48 @@
             "type": "string",
             "description": "API URL to access this message via the API."
           },
+          "authorId": {
+            "type": ["string", "null"],
+            "description": "The ID of the user who sent the message."
+          },
           "parentId": {
             "type": ["string", "null"],
             "description": "The ID of the parent message."
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "The URL where the attachment file can be accessed."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The original filename of the attachment."
+                },
+                "contentType": {
+                  "type": "string",
+                  "description": "The MIME type of the attachment file (e.g., image/png, application/pdf)."
+                },
+                "size": {
+                  "type": "number",
+                  "description": "The size of the attachment file in bytes."
+                },
+                "content": {
+                  "type": "string",
+                  "description": "The base64-encoded content of the attachment file, if available."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["screenshot", "figma", "zip"],
+                  "description": "Optional v0-specific attachment type for enhanced processing."
+                }
+              },
+              "required": ["url", "size"],
+              "additionalProperties": false
+            }
           },
           "chatId": {
             "type": "string",
@@ -8272,6 +8398,7 @@
           "type",
           "role",
           "apiUrl",
+          "authorId",
           "chatId"
         ],
         "additionalProperties": false,
@@ -8391,9 +8518,48 @@
             "type": "string",
             "description": "API URL to access this message via the API."
           },
+          "authorId": {
+            "type": ["string", "null"],
+            "description": "The ID of the user who sent the message."
+          },
           "parentId": {
             "type": ["string", "null"],
             "description": "The ID of the parent message."
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "The URL where the attachment file can be accessed."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The original filename of the attachment."
+                },
+                "contentType": {
+                  "type": "string",
+                  "description": "The MIME type of the attachment file (e.g., image/png, application/pdf)."
+                },
+                "size": {
+                  "type": "number",
+                  "description": "The size of the attachment file in bytes."
+                },
+                "content": {
+                  "type": "string",
+                  "description": "The base64-encoded content of the attachment file, if available."
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["screenshot", "figma", "zip"],
+                  "description": "Optional v0-specific attachment type for enhanced processing."
+                }
+              },
+              "required": ["url", "size"],
+              "additionalProperties": false
+            }
           }
         },
         "required": [
@@ -8403,7 +8569,8 @@
           "createdAt",
           "type",
           "role",
-          "apiUrl"
+          "apiUrl",
+          "authorId"
         ],
         "additionalProperties": false,
         "description": "Summary of a single message within a chat, including role, content, type, timestamp, and API URL."
@@ -8532,9 +8699,48 @@
                   "type": "string",
                   "description": "API URL to access this message via the API."
                 },
+                "authorId": {
+                  "type": ["string", "null"],
+                  "description": "The ID of the user who sent the message."
+                },
                 "parentId": {
                   "type": ["string", "null"],
                   "description": "The ID of the parent message."
+                },
+                "attachments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "description": "The URL where the attachment file can be accessed."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The original filename of the attachment."
+                      },
+                      "contentType": {
+                        "type": "string",
+                        "description": "The MIME type of the attachment file (e.g., image/png, application/pdf)."
+                      },
+                      "size": {
+                        "type": "number",
+                        "description": "The size of the attachment file in bytes."
+                      },
+                      "content": {
+                        "type": "string",
+                        "description": "The base64-encoded content of the attachment file, if available."
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["screenshot", "figma", "zip"],
+                        "description": "Optional v0-specific attachment type for enhanced processing."
+                      }
+                    },
+                    "required": ["url", "size"],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [
@@ -8544,7 +8750,8 @@
                 "createdAt",
                 "type",
                 "role",
-                "apiUrl"
+                "apiUrl",
+                "authorId"
               ],
               "additionalProperties": false,
               "description": "Summary of a single message within a chat, including role, content, type, timestamp, and API URL."
