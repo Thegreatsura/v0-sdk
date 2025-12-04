@@ -1,5 +1,13 @@
 # v0-sdk-react-example
 
+## 0.2.1
+
+### Patch Changes
+
+- c20a71c: upgrade react to fix CVE-2025-55182
+- Updated dependencies [c20a71c]
+  - @v0-sdk/react@0.4.1
+
 ## 0.2.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # v0-sdk
 
+## 0.15.3
+
+### Patch Changes
+
+- c20a71c: upgrade react to fix CVE-2025-55182
+
 ## 0.15.2
 
 ### Patch Changes
