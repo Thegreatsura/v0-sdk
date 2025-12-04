@@ -1,5 +1,13 @@
 # @v0-sdk/ai-tools
 
+## 0.3.3
+
+### Patch Changes
+
+- c20a71c: upgrade react to fix CVE-2025-55182
+- Updated dependencies [c20a71c]
+  - v0-sdk@0.15.3
+
 ## 0.3.2
 
 ### Patch Changes
