@@ -1,5 +1,12 @@
 # v0-sdk-react-example
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [7b759cf]
+  - @v0-sdk/react@0.5.1
+
 ## 0.3.0
 
 ### Minor Changes
