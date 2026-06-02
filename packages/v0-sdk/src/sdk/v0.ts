@@ -98,6 +98,7 @@ export type ChatDetail = {
     modelId?:
       | 'v0-auto'
       | 'v0-opus-4.7'
+      | 'v0-opus-4.7-fast'
       | 'v0-mini'
       | 'v0-pro'
       | 'v0-max'
@@ -764,9 +765,35 @@ export type ChatsCreateResponse = ChatDetail
 
 export type ChatsCreateStreamResponse = ReadableStream<Uint8Array>
 
-export interface ChatsFindResponse {
+export type ChatsFindResponse = {
   object: 'list'
-  data: ChatSummary[]
+  data: Array<{
+    id: string
+    object: 'chat'
+    shareable: boolean
+    privacy: 'public' | 'private' | 'team' | 'team-edit' | 'unlisted'
+    name?: string
+    /** @deprecated */
+    title?: string
+    createdAt: string
+    updatedAt?: string
+    favorite: boolean
+    authorId: string
+    projectId?: string
+    vercelProjectId?: string
+    webUrl: string
+    apiUrl: string
+    latestVersion?: {
+      id: string
+      object: 'version'
+      status: 'pending' | 'completed' | 'failed'
+      demoUrl?: string
+      screenshotUrl?: string
+      createdAt: string
+      updatedAt?: string
+      darkScreenshotUrl?: string
+    }
+  }>
 }
 
 export type ChatsInitRequest = {
@@ -945,8 +972,6 @@ export interface ChatsDeleteVersionFilesRequest {
 
 export type ChatsDeleteVersionFilesResponse = VersionDetail
 
-export type ChatsResumeResponse = MessageDetail
-
 export interface ChatsStopResponse {
   success: true
 }
@@ -964,13 +989,13 @@ export interface ChatsResolveTaskRequest {
           | 'Amazon Aurora PostgreSQL'
           | 'Amazon DynamoDB'
           | 'firebase'
-          | 'Groq'
           | 'Grok'
           | 'fal'
           | 'Deep Infra'
           | 'Stripe'
           | 'Clerk'
           | 'Convex'
+          | 'Shopify'
           | 'Blob'
           | 'Edge Config'
           | 'Vercel AI Gateway'
@@ -1871,7 +1896,7 @@ export function createClient(config: V0ClientConfig = {}) {
       async resume(params: {
         chatId: string
         messageId: string
-      }): Promise<ChatsResumeResponse> {
+      }): Promise<any> {
         const pathParams = {
           chatId: params.chatId,
           messageId: params.messageId,
