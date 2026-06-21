@@ -1,5 +1,15 @@
 # v0-clone
 
+## 0.3.5
+
+### Patch Changes
+
+- Updated dependencies [edd2c11]
+- Updated dependencies [7b759cf]
+- Updated dependencies [cfd61a7]
+  - v0-sdk@0.16.5
+  - @v0-sdk/react@0.5.1
+
 ## 0.3.4
 
 ### Patch Changes
